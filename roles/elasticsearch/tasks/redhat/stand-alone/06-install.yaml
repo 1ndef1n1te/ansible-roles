@@ -1,0 +1,11 @@
+---
+- name: Install elasticsearch packages
+  ansible.builtin.yum:
+    name: "{{elasticsearch_rpm_url}}"
+    state: present
+    update_cache: true
+    disable_gpg_check: true
+
+- name: Notify that packages are installed successfully
+  ansible.builtin.debug:
+    msg: Packages for elasticsearch are installed successfully for node {{ansible_host}}

@@ -1,0 +1,17 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that install docker daemon
+    options:
+      docker_engine_version:
+        type: str
+        description: Package version of docker engine
+        default: "26.0.0"
+      docker_containerd_version:
+        type: str
+        description: Package version of containerd
+        default: "1.6.28"
+      docker_insecure_registries:
+        type: str
+        description: List of insecure registries

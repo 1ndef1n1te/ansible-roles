@@ -1,0 +1,5 @@
+---
+rabbitmq_packages:
+  redhat:
+    - rabbitmq-server-{{rabbitmq_rabbitmq_server_version}}
+    - erlang-{{rabbitmq_erlang_version}}

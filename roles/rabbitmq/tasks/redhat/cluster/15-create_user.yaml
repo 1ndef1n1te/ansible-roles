@@ -1,0 +1,10 @@
+---
+- name: Create rabbitmq administator
+  ansible.builtin.shell: |
+    rabbitmqctl add_user {{rabbitmq_admin_login}} {{rabbitmq_admin_password}}
+    rabbitmqctl set_user_tags {{rabbitmq_admin_login}} administrator
+    rabbitmqctl set_permissions -p / {{rabbitmq_admin_login}} ".*" ".*" ".*"
+    rabbitmqctl set_cluster_name {{rabbitmq_cluster_name}}
+  when: inventory_hostname == rabbitmq_master_node
+  register: __rabbitmq_create_user_result
+  changed_when: "'already exists' not in __rabbitmq_create_user_result.stderr" # Errors return 0 rc

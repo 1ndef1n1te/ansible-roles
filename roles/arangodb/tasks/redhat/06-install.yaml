@@ -1,0 +1,20 @@
+---
+- name: Add arangodb repository
+  ansible.builtin.yum_repository:
+    name: arangodb
+    description: ArangoDB yum repo
+    baseurl: "{{arangodb_repo_url}}"
+    gpgcheck: false
+
+- name: Install arangodb packages
+  ansible.builtin.yum:
+    name: "{{item}}"
+    state: present
+    disablerepo: "*"
+    enablerepo: "arangodb"
+    update_cache: true
+  loop: "{{arangodb_packages.redhat}}"
+
+- name: Notify that packages are installed successfully
+  ansible.builtin.debug:
+    msg: Packages for arangodb are installed successfully for node {{ansible_host}}

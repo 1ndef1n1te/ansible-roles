@@ -1,0 +1,24 @@
+---
+- name: Add docker repository
+  ansible.builtin.yum_repository:
+    name: docker-ce
+    description: Docker-ce yum repo
+    baseurl: "{{docker_repo_url}}"
+    gpgcheck: false
+
+- name: Install docker packages
+  ansible.builtin.yum:
+    name: "{{item}}"
+    state: present
+    update_cache: true
+  loop: "{{docker_packages.redhat}}"
+
+- name: Ensure docker daemon enabled and running
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Notify that packages are installed successfully
+  ansible.builtin.debug:
+    msg: Packages for docker are installed successfully for node {{ansible_host}}

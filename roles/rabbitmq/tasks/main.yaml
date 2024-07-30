@@ -1,0 +1,17 @@
+---
+- name: Gather some facts about host 
+  ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+- name: Start pre_check
+  include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{rabbitmq_install_type}}/01-pre_installation_check.yaml"
+- name: Include prepare tasks
+  include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{rabbitmq_install_type}}/03-prepare.yaml"
+- name: Include install tasks
+  include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{rabbitmq_install_type}}/06-install.yaml"
+- name: Include configure tasks
+  include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{rabbitmq_install_type}}/09-configure.yaml"
+- name: Include post_check tasks
+  include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{rabbitmq_install_type}}/12-post_installation_check.yaml"
+- name: Include create_user tasks
+  include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{rabbitmq_install_type}}/15-create_user.yaml"

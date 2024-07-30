@@ -1,0 +1,9 @@
+---
+docker_packages:
+  redhat:
+    - docker-ce-{{docker_engine_version}}
+    - docker-ce-cli-{{docker_engine_version}}
+    - containerd.io-{{docker_containerd_version}}
+
+docker_daemon_config:
+  insecure-registries: "{{docker_insecure_registries}}"

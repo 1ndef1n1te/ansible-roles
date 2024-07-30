@@ -1,0 +1,9 @@
+---
+# Default vars for install_arangodb role
+
+arangodb_server_version: 3.11.8
+arangodb_repo_url: "https://download.arangodb.com/arangodb311/RPM"
+arangodb_root_password: yaileNgei0eib5b
+arangodb_data_dir: /var/lib/arangodb3
+arangodb_log_dir: /var/log/arangodb3
+arangodb_log_level: info

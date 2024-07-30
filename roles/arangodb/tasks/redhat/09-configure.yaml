@@ -1,0 +1,39 @@
+---
+- name: Copy arangod service file
+  ansible.builtin.template:
+    src: "arangodb3.service.j2"
+    dest: /etc/systemd/system/arangodb3.service
+    mode: "0600"
+  notify:
+    - force systemd to reread configs
+
+- name: Create arangodb log and data directory
+  ansible.builtin.file:
+    state: directory
+    owner: arangodb
+    group: arangodb
+    dest: "{{item}}"
+    mode: "0700"
+  loop:
+    - "{{arangodb_data_dir}}"
+    - "{{arangodb_log_dir}}"
+
+- name: Copy arangodb configuration file
+  ansible.builtin.template:
+    src: "arangod.conf.j2"
+    dest: /etc/arangodb3/arangod.conf
+    owner: arangodb
+    group: arangodb
+    mode: "0644"
+  notify:
+    - restart arangod service
+
+- name: Copy locale config
+  ansible.builtin.copy:
+    src: "LANGUAGE"
+    dest: /var/lib/arangodb3/LANGUAGE
+    owner: arangodb
+    group: arangodb
+    mode: "0640"
+  notify:
+    - restart arangod service

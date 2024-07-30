@@ -1,0 +1,17 @@
+---
+- name: Start change root password block
+  block:
+    - name: Change password for root user
+      ansible.builtin.shell: |
+        /usr/sbin/arango-secure-installation
+      environment:
+        ARANGODB_DEFAULT_ROOT_PASSWORD: "{{arangodb_root_password}}"
+      register: __ia_change_root_password_result
+
+    - name: Set local fact about changing password for root user
+      ansible.builtin.copy:
+        dest: /etc/ansible/facts.d/{{role_name}}_role.fact
+        mode: "0644"
+        content: >
+          {{ arangodb_role_fact | to_nice_json }}
+  when: ansible_local.arangodb_role.arangodb_root_user_changed is not defined

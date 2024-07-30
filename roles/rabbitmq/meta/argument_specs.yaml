@@ -1,0 +1,42 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that install rabbitmq cluster or stand-alone service
+    options:
+      rabbitmq_install_type:
+        type: str
+        description: "Rabbitmq installation type (Note: in cluster mode you should
+          have more than 1 node in rabbitmq-nodes group)"
+        choices:
+          - stand-alone
+          - cluster
+      rabbitmq_admin_login:
+        type: str
+        description: Admin user for rabbitmq
+        default: user
+      rabbitmq_admin_password:
+        type: str
+        description: Admin password for rabbitmq
+        default: password
+      rabbitmq_enabled_plugins:
+        type: str
+        description: List of rabbitmq enabled plugins
+        default:
+          - rabbitmq_management
+          - rabbitmq_prometheus
+      rabbitmq_master_node:
+        type: str
+        description: Hostname of rabbitmq pseudo-master node from inventory
+      rabbitmq_erlang_cookie:
+        type: str
+        description: Erlang cookie for rabbitmq cluster
+      rabbitmq_cluster_name:
+        type: str
+        description: Rabbitmq cluster name
+      rabbitmq_rabbitmq_server_version:
+        type: str
+        description: Rabbitmq server package version
+      rabbitmq_erlang_version:
+        type: str
+        description: Rabbitmq erlang package version

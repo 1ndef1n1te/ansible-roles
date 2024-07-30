@@ -1,0 +1,10 @@
+---
+- name: force systemd to reread configs
+  ansible.builtin.service:
+    daemon_reload: true
+
+- name: restart arangod service
+  ansible.builtin.service:
+    name: arangodb3
+    state: restarted
+    enabled: true

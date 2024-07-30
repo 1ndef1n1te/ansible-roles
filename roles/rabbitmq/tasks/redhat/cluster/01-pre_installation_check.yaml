@@ -1,0 +1,5 @@
+---
+- name: Fail if cluster mode with < 2 nodes
+  ansible.builtin.fail:
+    msg: You should define > 1 nodes with rabbitmq installation type cluster
+  when: rabbitmq_install_type == "cluster" and rabbimq_nodes_count | int < 2

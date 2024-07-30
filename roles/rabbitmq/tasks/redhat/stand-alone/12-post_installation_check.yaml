@@ -1,0 +1,8 @@
+---
+- name: Check rabbitmq cluster-status
+  ansible.builtin.shell: rabbitmqctl cluster_status
+  changed_when: false
+
+- name: Post check result
+  ansible.builtin.debug:
+    msg: successfully passed post check

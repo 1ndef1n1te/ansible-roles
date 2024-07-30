@@ -1,0 +1,4 @@
+---
+elasticsearch_role_fact:
+  role_name: "{{ role_name }}"
+  elastic_user_password: "{{__elasticsearch_elastic_password.stdout}}"

@@ -1,0 +1,55 @@
+---
+- name: Create elasticsearch log and data dir
+  ansible.builtin.file:
+    state: directory
+    owner: elasticsearch
+    group: elasticsearch
+    dest: "{{item}}"
+    mode: "0755"
+  loop:
+    - "{{elasticsearch_data_dir}}"
+    - "{{elasticsearch_log_dir}}"
+
+- name: Copy elasticsearch config file
+  ansible.builtin.template:
+    src: "{{elasticsearch_install_type}}/elasticsearch.yml.j2"
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: elasticsearch
+    group: elasticsearch
+    mode: "0644"
+  notify:
+    - restart elasticsearch service
+
+- name: Copy elasticsearch jvm options file
+  ansible.builtin.template:
+    src: "{{elasticsearch_install_type}}/elastic_jvm.options.j2"
+    dest: /etc/elasticsearch/jvm.options.d/elastic_jvm.options
+    owner: elasticsearch
+    group: elasticsearch
+    mode: "0644"
+  notify:
+    - restart elasticsearch service
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Generate new elastic user password
+  block:
+    - name: Change password for elastic user
+      ansible.builtin.shell: |
+        /usr/share/elasticsearch/bin/elasticsearch-reset-password -s -b -u elastic
+      register: __elasticsearch_elastic_password
+
+    - name: Print elastic user password info
+      ansible.builtin.debug:
+        msg: elastic user password can be found in /etc/ansible/facts.d/{{role_name}}_role.fact
+
+    - name: Set local fact about generating new password for elastic user
+      ansible.builtin.copy:
+        dest: /etc/ansible/facts.d/{{role_name}}_role.fact
+        mode: "0644"
+        content: >
+          {{ elasticsearch_role_fact | to_nice_json }}
+  when: ansible_local.elasticsearch_role.elastic_user_password is not defined
+
+

@@ -1,0 +1,48 @@
+---
+- name: Copy rabbitmq env file
+  ansible.builtin.template:
+    src: rabbitmq-env.conf.j2
+    dest: /etc/rabbitmq/rabbitmq-env.conf
+    owner: rabbitmq
+    group: rabbitmq
+    mode: "0644"
+  notify:
+    - restart rabbitmq-server service
+
+- name: Copy rabbitmq plugins file
+  ansible.builtin.template:
+    src: enabled_plugins.j2
+    dest: /etc/rabbitmq/enabled_plugins
+    owner: rabbitmq
+    group: rabbitmq
+    mode: "0644"
+  notify:
+    - restart rabbitmq-server service
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+  
+- name: Get erlang cookie from pseudo-master rabbitmq node
+  ansible.builtin.shell: >
+    cat /var/lib/rabbitmq/.erlang.cookie
+  changed_when: false
+  register: rabbitmq_erlang_cookie
+  when: inventory_hostname == rabbitmq_master_node
+
+- name: Set fact eralng cookie on pseudo-slave nodes
+  ansible.builtin.set_fact:
+    rabbitmq_erlang_cookie: "{{ hostvars[rabbitmq_master_node]['rabbitmq_erlang_cookie']['stdout']
+      }}"
+  when: inventory_hostname != rabbitmq_master_node
+
+- name: Configure pseudo-slaves rabbitmq nodes with erlang cookie file
+  ansible.builtin.template:
+    src: .eralng.cookie.j2
+    dest: /var/lib/rabbitmq/.erlang.cookie
+  notify:
+    - restart rabbitmq-server service
+    - join pseudo-slave nodes to cluster
+  when: inventory_hostname != rabbitmq_master_node
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

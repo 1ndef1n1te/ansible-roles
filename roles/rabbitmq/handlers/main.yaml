@@ -1,0 +1,12 @@
+---
+- name: restart rabbitmq-server service
+  ansible.builtin.service:
+    name: rabbitmq-server
+    state: restarted
+    enabled: true
+
+- name: join pseudo-slave nodes to cluster
+  ansible.builtin.shell: |-
+    rabbitmqctl stop_app &&
+    rabbitmqctl join_cluster rabbit@{{rabbitmq_master_node}} &&
+    rabbitmqctl start_app

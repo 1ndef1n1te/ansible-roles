@@ -1,0 +1,75 @@
+---
+- name: Prepare local repository
+  hosts: nodes
+  become: true
+  roles:
+    - local_repo
+  tags:
+    - with_local_repo
+
+- name: Add local repository on sp_nodes
+  hosts: nodes
+  become: true
+  roles:
+    - local_repo_on_nodes
+  tags:
+    - with_local_repo_on_nodes
+
+- name: Install rabbitmq
+  hosts: rabbitmq-nodes
+  gather_facts: false
+  become: true
+  roles:
+    - rabbitmq
+  vars:
+    rabbimq_nodes_count: "{{groups['rabbitmq-nodes'] | length}}"
+  tags:
+    - with_rabbitmq
+
+- name: Install elasticsearch
+  hosts: elasticsearch-nodes
+  become: true
+  roles:
+    - elasticsearch
+  tags:
+    - with_elasticsearch
+
+- name: Install MongoDB
+  hosts: mongodb_nodes
+  become: true
+  roles:
+    - mongodb
+  tags:
+    - with_mongodb
+
+- name: Install ArangoDB
+  hosts: arangodb_nodes
+  become: true
+  roles:
+    - arangodb
+  tags:
+    - with_arangodb
+
+- name: Install Docker
+  hosts: docker_nodes
+  become: true
+  roles:
+    - docker
+  tags:
+    - with_docker
+
+- name: Prepare k8s nodes
+  hosts: k8s-nodes
+  become: true
+  roles:
+    - k8s_node
+  tags:
+    - with_k8s_node
+
+- name: Configure containerd mirrors
+  hosts: k8s-nodes
+  become: true
+  roles:
+    - containerd_mirrors
+  tags:
+    - with_containerd_mirrors

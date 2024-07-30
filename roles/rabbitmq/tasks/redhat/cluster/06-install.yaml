@@ -1,0 +1,22 @@
+---
+- name: Copy rabbitmq rpm repo
+  ansible.builtin.copy:
+    src: rabbitmq.repo
+    dest: /etc/yum.repos.d/rabbitmq.repo
+
+- name: Install rabbitmq packages
+  ansible.builtin.yum:
+    name: "{{item}}"
+    state: present
+    update_cache: true
+  loop: "{{rabbitmq_packages.redhat}}"
+
+- name: start rabbitmq-server service
+  ansible.builtin.service:
+    name: rabbitmq-server
+    state: started
+    enabled: true
+
+- name: Notify that packages are installed successfully
+  ansible.builtin.debug:
+    msg: Packages for rabbitmq are installed successfully for node {{ansible_host}}

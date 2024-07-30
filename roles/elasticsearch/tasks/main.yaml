@@ -1,0 +1,9 @@
+---
+- name: Include prepare tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{elasticsearch_install_type}}/03-prepare.yaml"
+- name: Include install tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{elasticsearch_install_type}}/06-install.yaml"
+- name: Include configure tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{elasticsearch_install_type}}/09-configure.yaml"
+- name: Include post_check tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{elasticsearch_install_type}}/12-post_installation_check.yaml"

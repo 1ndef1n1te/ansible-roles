@@ -1,0 +1,10 @@
+---
+- name: Disable firewalld
+  ansible.builtin.systemd:
+    state: stopped
+    name: firewalld
+    enabled: false
+
+- name: Disable selinux
+  ansible.posix.selinux:
+    state: disabled

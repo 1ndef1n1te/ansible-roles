@@ -1,0 +1,30 @@
+
+[database]
+directory = {{arangodb_data_dir}}
+
+[server]
+endpoint = tcp://0.0.0.0:8529
+storage-engine = auto
+
+authentication = true
+
+statistics = true
+
+uid = arangodb
+
+
+[javascript]
+startup-directory = /usr/share/arangodb3/js
+app-path = /var/lib/arangodb3-apps
+
+[foxx]
+
+
+[log]
+level = {{arangodb_log_level}}
+file = {{arangodb_log_dir}}/arangod.log
+
+[cluster]
+
+[rocksdb]
+

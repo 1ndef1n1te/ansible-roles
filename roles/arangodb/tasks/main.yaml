@@ -1,0 +1,9 @@
+---
+- name: Include prepare tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/03-prepare.yaml"
+- name: Include install tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/06-install.yaml"
+- name: Include configure tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/09-configure.yaml"
+- name: Include create_user tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/12-create_user.yaml"

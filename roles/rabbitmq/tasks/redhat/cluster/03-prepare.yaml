@@ -1,0 +1,15 @@
+---
+- name: Disable firewalld
+  ansible.builtin.systemd:
+    state: stopped
+    name: firewalld
+    enabled: false
+
+- name: Disable selinux
+  ansible.posix.selinux:
+    state: disabled
+
+- name: Copy hosts file for rabbiitmq nodes
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /etc/hosts

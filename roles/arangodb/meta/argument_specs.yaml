@@ -1,0 +1,27 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that install arangodb stand-alone service
+    options:
+      arangodb_repo_url:
+        type: str
+        description: Repo URL for ArangoDB rpms
+      arangodb_root_password:
+        type: str
+        description: Password for root user
+      arangodb_server_version:
+        type: str
+        description: ArangoDB server package version
+      arangodb_data_dir:
+        type: str
+        description: ArangoDB path to data directory
+        default: /var/lib/arangodb3
+      arangodb_log_dir:
+        type: str
+        description: ArangoDB path to log directory
+        default: /var/log/arangodb3
+      arangodb_log_level:
+        type: str
+        description: Log level of ArangoDB instance
+        default: info

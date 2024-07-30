@@ -1,0 +1,4 @@
+127.0.0.1 localhost
+{% for host in groups['rabbitmq-nodes'] %}
+{{ hostvars[host]['ansible_ssh_host'] }} {{host}}
+{% endfor %}

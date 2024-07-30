@@ -1,0 +1,37 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that install elasticsearch cluster or stand-alone service
+    options:
+      elasticsearch_install_type:
+        type: str
+        description: "Elasticsearch installation type (Note: in cluster mode you should have more than 1 node in elasticsearch-nodes group)"
+        choices:
+          - stand-alone
+      elasticsearch_rpm_url:
+        type: str
+        description: Elasticsearch RPM url
+      elasticsearch_cluster_name:
+        type: str
+        description: Elasticsearch cluster name
+      elasticsearch_package_version:
+        type: str
+        description: Elasticsearch package version
+        default: 8.4.3
+      elasticsearch_data_dir:
+        type: str
+        description: Elasticsearch data directory path
+        required: true
+      elasticsearch_log_dir:
+        type: str
+        description: Elasticsearch log directory path
+        required: true
+      elasticsearch_http_port:
+        type: str
+        description: Elasticsearch http port
+        default: "9200"
+      elasticsearch_jvm_heap_size:
+        type: str
+        description: JVM heap size measured in GB
+        default: "4"

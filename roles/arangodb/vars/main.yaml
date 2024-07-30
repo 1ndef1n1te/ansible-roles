@@ -1,0 +1,8 @@
+---
+arangodb_packages:
+  redhat:
+    - arangodb3-{{arangodb_server_version}}
+
+arangodb_role_fact:
+  role_name: "{{ role_name }}"
+  arangodb_root_user_changed: "{{__ia_change_root_password_result.changed}}"

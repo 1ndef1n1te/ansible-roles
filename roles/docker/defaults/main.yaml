@@ -1,0 +1,5 @@
+---
+docker_repo_url: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+docker_engine_version: "26.0.0"
+docker_containerd_version: "1.6.28"
+docker_insecure_registries: !!null

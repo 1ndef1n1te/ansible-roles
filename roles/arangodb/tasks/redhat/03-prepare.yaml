@@ -1,0 +1,39 @@
+---
+- name: Disable firewalld
+  ansible.builtin.systemd:
+    state: stopped
+    name: firewalld
+    enabled: false
+
+- name: Disable selinux
+  ansible.posix.selinux:
+    state: disabled
+
+- name: Create custom fact directory
+  ansible.builtin.file:
+    path: /etc/ansible/facts.d
+    state: directory
+    mode: "0755"
+
+- name: Set overcommit memory to 0
+  ansible.posix.sysctl:
+    name: vm.overcommit_memory
+    value: "0"
+    state: present
+
+- name: Increase max_map_count
+  ansible.posix.sysctl:
+    name: vm.max_map_count
+    value: "2048000"
+    state: present
+
+- name: Set zone_reclaim_mode
+  ansible.posix.sysctl:
+    name: vm.zone_reclaim_mode
+    value: "0"
+    state: present
+
+- name: Configure hugepages
+  ansible.builtin.shell: |-
+    echo madvise >/sys/kernel/mm/transparent_hugepage/enabled
+    echo madvise >/sys/kernel/mm/transparent_hugepage/defrag

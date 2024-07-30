@@ -1,0 +1,9 @@
+---
+- name: Configure insecure registries
+  ansible.builtin.copy:
+    dest: /etc/docker/daemon.json
+    mode: "0644"
+    content: >
+      {{ docker_daemon_config | to_nice_json }}
+  notify:
+    - restart docker service

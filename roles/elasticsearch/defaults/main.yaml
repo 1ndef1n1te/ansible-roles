@@ -1,0 +1,12 @@
+---
+# Default vars for install_rabbitmq role
+
+elasticsearch_install_type: stand-alone
+elasticsearch_master_node: elasticsearch-node-1
+elasticsearch_cluster_name: es-cluster
+elasticsearch_package_version: 8.4.3
+elasticsearch_rpm_url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{elasticsearch_package_version}}-x86_64.rpm"
+elasticsearch_data_dir: /es-data
+elasticsearch_log_dir: /es-log
+elasticsearch_http_port: "9200"
+elasticsearch_jvm_heap_size: "2"

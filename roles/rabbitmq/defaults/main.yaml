@@ -1,0 +1,14 @@
+---
+# Default vars for install_rabbitmq role
+
+rabbitmq_install_type: stand-alone
+rabbitmq_admin_login: user
+rabbitmq_admin_password: tahVae1boh3ohlu
+rabbitmq_cluster_name: rabbit@sample
+rabbitmq_enabled_plugins:
+  - rabbitmq_management
+  - rabbitmq_prometheus
+rabbitmq_master_node: rabbitmq-node-1
+rabbitmq_erlang_cookie: !!null
+rabbitmq_rabbitmq_server_version: 3.12.12
+rabbitmq_erlang_version: 26.2.5.2

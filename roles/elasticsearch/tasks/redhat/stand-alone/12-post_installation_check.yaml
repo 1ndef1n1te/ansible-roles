@@ -1,0 +1,16 @@
+---
+- name: Check elasticsearch cluster-status
+  ansible.builtin.uri:
+    url: 
+      https://elastic:{{ansible_local.elasticsearch_role.elastic_user_password | default(__elasticsearch_elastic_password.stdout)}}@{{ansible_ssh_host}}:9200/_cluster/health?pretty
+    follow_redirects: none
+    method: GET
+    validate_certs: false
+  register: __elasticsearch_post_check_result
+  until: __elasticsearch_post_check_result.status == 200
+  retries: 5
+  delay: 2
+
+- name: Post check result
+  ansible.builtin.debug:
+    msg: Successfully passed post check
