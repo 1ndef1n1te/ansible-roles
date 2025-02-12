@@ -1,0 +1,8 @@
+---
+k3s_version: v1.29.9+k3s1
+k3s_public_ip: IP
+
+k3s_steps:
+  - prepare-k3s
+  - install-k3s
+  - get-context

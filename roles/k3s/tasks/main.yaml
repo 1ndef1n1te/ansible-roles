@@ -1,0 +1,10 @@
+---
+- name: Include prepare k3s tasks
+  ansible.builtin.include_tasks: "02-prepare-k3s.yaml"
+  when: '"prepare-k3s" in k3s_steps'
+- name: Include installing k3s tasks
+  ansible.builtin.include_tasks: "03-install-k3s.yaml"
+  when: '"install-k3s" in k3s_steps'
+- name: Include fetching k3s context tasks
+  ansible.builtin.include_tasks: "05-get-context.yaml"
+  when: '"get-context" in k3s_steps'
