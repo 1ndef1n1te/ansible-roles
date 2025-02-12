@@ -1,0 +1,14 @@
+---
+- name: Disable firewalld
+  ansible.builtin.systemd:
+    state: stopped
+    name: firewalld
+    enabled: false
+  register: result_systemd_stop
+  failed_when: "result_systemd_stop is failed and 'Could not find the requested service' not in result_systemd_stop.msg"
+  when: nofirewall_disable_firewall
+
+- name: Disable selinux
+  ansible.posix.selinux:
+    state: disabled
+  when: nofirewall_disable_selinux
