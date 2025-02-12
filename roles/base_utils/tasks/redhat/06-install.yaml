@@ -1,0 +1,22 @@
+---
+- name: Offline install base utils packages
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+    disablerepo: "*"
+    enablerepo: sp-local-{{ ansible_distribution | lower + ansible_distribution_major_version }}
+    update_cache: true
+  loop: "{{ base_utils_packages.redhat }}"
+  when: base_utils_installation_type == 'offline'
+
+- name: Online install base utils packages
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop: "{{ base_utils_packages.redhat }}"
+  when: base_utils_installation_type == 'online'
+
+- name: Notify that packages are installed successfully
+  ansible.builtin.debug:
+    msg: Base packages are installed successfully for node {{ ansible_host }}

@@ -1,0 +1,14 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that installs base utils on server
+    options:
+      base_utils_packages:
+        type: dict
+        description: Dictionary matching list with packages and distribution
+
+      base_utils_steps:
+        type: list
+        elements: str
+        description: Task steps that will be run in base_utils role

@@ -1,0 +1,19 @@
+---
+base_utils_installation_type: online
+base_utils_packages:
+  redhat:
+    - epel-release
+    - vim
+    - lsof
+    - htop
+    - iotop
+    - net-tools
+    - yum-utils
+    - dstat
+    - iptraf
+    - tmux
+    - tar
+    - zip
+
+base_utils_steps:
+  - install
