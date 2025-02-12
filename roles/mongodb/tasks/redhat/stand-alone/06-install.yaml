@@ -1,0 +1,17 @@
+---
+- name: Install mongodb packages
+  ansible.builtin.yum:
+    name: "{{item}}"
+    state: present
+    update_cache: true
+  loop: "{{mongodb_packages.redhat}}"
+
+- name: start mongod service
+  ansible.builtin.service:
+    name: mongod
+    state: started
+    enabled: true
+
+- name: Notify that packages are installed successfully
+  ansible.builtin.debug:
+    msg: Packages for mongodb are installed successfully for node {{ansible_host}}

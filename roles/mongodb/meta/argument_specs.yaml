@@ -1,0 +1,41 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that install mongodb stand-alone service
+    options:
+      mongodb_install_type:
+        type: str
+        description: Mongodb installation type
+        choices:
+          - stand-alone
+      mongodb_mongosh_package_version:
+        type: str
+        description: Mongosh package verison
+      mongodb_org_packages_version:
+        type: str
+        description: MongoDB package version
+        default: password
+      mongodb_data_dir:
+        type: str
+        description: MongoDB path to data directory
+        default: /var/lib/mongo
+      mongodb_log_dir:
+        type: str
+        description: MongoDB path to log directory
+        default: /var/log/mongodb
+      mongodb_authorization_enabled:
+        type: bool
+        description: Define if auth should be enabled
+        default: true
+      mongodb_admin_user:
+        type: str
+        description: Username for mongodb admin user
+      mongodb_admin_password:
+        type: str
+        description: Password for mongodb admin user
+
+      mongodb_steps:
+        type: list
+        elements: str
+        description: Task steps that will be run in mongodb role

@@ -1,0 +1,27 @@
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path: {{mongodb_log_dir}}/mongod.log
+
+# Where and how to store data.
+storage:
+  dbPath: {{mongodb_data_dir}}
+  journal:
+    enabled: true
+
+# how the process runs
+processManagement:
+  timeZoneInfo: /usr/share/zoneinfo
+
+# network interfaces
+net:
+  port: 27017
+  bindIp: 0.0.0.0  # Enter 0.0.0.0,:: to bind to all IPv4 and IPv6 addresses or, alternatively, use the net.bindIpAll setting.
+
+# security configurations
+{% if mongodb_authorization_enabled %}
+security:
+  authorization: enabled
+{% endif %}

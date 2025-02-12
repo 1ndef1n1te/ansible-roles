@@ -1,0 +1,10 @@
+---
+- name: Include install tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{mongodb_install_type}}/06-install.yaml"
+  when: '"install" in mongodb_steps'
+- name: Include configure tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{mongodb_install_type}}/09-configure.yaml"
+  when: '"configure" in mongodb_steps'
+- name: Include create user tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/{{mongodb_install_type}}/12-create_user.yaml"
+  when: '"create_user" in mongodb_steps'

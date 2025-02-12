@@ -1,0 +1,21 @@
+---
+- name: Create mongodb log and data dir
+  ansible.builtin.file:
+    state: directory
+    owner: mongod
+    group: mongod
+    dest: "{{item}}"
+    mode: "0755"
+  loop:
+    - "{{mongodb_data_dir}}"
+    - "{{mongodb_log_dir}}"
+
+- name: Copy mongodb config file
+  ansible.builtin.template:
+    src: "{{mongodb_install_type}}/mongod.conf.j2"
+    dest: /etc/mongod.conf
+    owner: mongod
+    group: mongod
+    mode: "0644"
+  notify:
+    - restart mongodb service

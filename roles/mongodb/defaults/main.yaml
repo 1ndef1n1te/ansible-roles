@@ -1,0 +1,16 @@
+---
+# Default vars for install_mongodb role
+
+mongodb_install_type: stand-alone
+mongodb_mongosh_package_version: 1.10.5
+mongodb_org_packages_version: 6.0.9 # Main package of mongodb server
+mongodb_data_dir: /mongodata
+mongodb_log_dir: /mongologs
+mongodb_authorization_enabled: false
+mongodb_admin_user: user
+mongodb_admin_password: PASSWORD
+
+mongodb_steps:
+  - install
+  - configure
+  - create_user

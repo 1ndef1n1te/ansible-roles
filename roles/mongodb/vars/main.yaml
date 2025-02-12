@@ -1,0 +1,5 @@
+---
+mongodb_packages:
+  redhat:
+    - mongodb-mongosh-{{mongodb_mongosh_package_version}}
+    - mongodb-org-{{mongodb_org_packages_version}}

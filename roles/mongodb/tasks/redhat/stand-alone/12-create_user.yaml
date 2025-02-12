@@ -1,0 +1,9 @@
+---
+- name: Create admin user for mongodb
+  ansible.builtin.shell: >
+    echo 'db.createUser({
+    user: "{{mongodb_admin_user}}",  pwd: "{{mongodb_admin_password}}",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+    })' | mongosh admin
+  register: __mongodb_create_user_result
+  changed_when: "'already exists' not in __mongodb_create_user_result.stdout"
