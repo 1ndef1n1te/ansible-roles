@@ -1,0 +1,15 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that scrape facts from node and save it in json format
+    options:
+      node_facts_file_name:
+        type: str
+        description: Name directory with facts
+        default: "node_facts.json"
+
+      node_facts_steps:
+        type: list
+        elements: str
+        description: Task steps that will be run in node_facts role

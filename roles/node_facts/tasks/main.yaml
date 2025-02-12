@@ -1,0 +1,74 @@
+- name: Gather general info about vm
+  ansible.builtin.setup:
+    gather_subset:
+      - '!all'
+      - '!min'
+      - date_time
+      - hardware
+      - distribution
+    filter:
+      - "ansible_processor_vcpus"
+      - "ansible_memtotal_mb"
+      - "date_time"
+      - "ansible_distribution"
+      - "ansible_distribution_version"
+      - "ansible_fqdn"
+      - "ansible_mounts"
+
+- name: Check priviledge escalation
+  become: true
+  ansible.builtin.command: id -u
+  register: id_output
+  ignore_errors: true
+
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
+- name: Set service facts
+  ansible.builtin.set_fact:
+    vm_services: "{{vm_services | d([]) + [item]}}"
+  when: "item | regex_search(node_facts_services_regex)"
+  loop: "{{ansible_facts.services.keys() | list }}"
+
+- name: Set fact about priviledge escalation
+  ansible.builtin.set_fact:
+    vm_priviledge_escalation: "{{ 'false' if id_output.failed else 'true' }}"
+
+- name: Set fact about running docker containers 
+  become: true
+  ansible.builtin.shell: docker ps --format {%raw%}'{{.Image}}'{%endraw%}
+  register: vm_docker_running_containers
+  when: "'docker.service' in ansible_facts.services"
+
+- name: Set mount variable 
+  ansible.builtin.set_fact:
+    vm_mounts: "{{vm_mounts | d({}) | combine({item.mount: item.size_total / 1024.0**3})}}"
+  when: '"size_total" in item'
+  loop: "{{ansible_mounts}}"
+
+- name: Creating info fact
+  ansible.builtin.set_fact:
+    vm_general_info:
+        hostname: "{{ansible_fqdn}}"
+        ipv4: "{{ansible_default_ipv4.address}}"
+        sudo: "{{vm_priviledge_escalation}}"
+        distribution: "{{ansible_distribution}} {{ansible_distribution_version}}"
+        cpu: "{{ansible_processor_vcpus}}"
+        ram: "{{(ansible_memtotal_mb / 1024.0) | round(2, 'floor')}}"
+        time: "{{ansible_date_time.iso8601}}"
+        mounts: "{{vm_mounts}}"
+        services: "{{vm_services}}"
+        containers: "{{vm_docker_running_containers.stdout_lines | d([])}}"
+
+- name: Create json file for facts
+  ansible.builtin.copy:
+    dest: "{{role_path}}/{{node_facts_file_name}}"
+    content: "{{node_facts_init_file | to_nice_json }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: Build json facts file
+  shell: |
+    jq '.vms += [{{vm_general_info | to_nice_json }}'] {{role_path}}/{{node_facts_file_name}} > {{role_path}}/temp.json && mv {{role_path}}/temp.json {{role_path}}/{{node_facts_file_name}}
+  delegate_to: localhost
+  throttle: 1

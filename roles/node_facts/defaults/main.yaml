@@ -1,0 +1,5 @@
+---
+node_facts_file_name: node_facts
+node_facts_services_regex: "postgres|redis|clickhouse|hadoop|pulsar|rabbit|elastic|minio|k3s|kubelet|named|bind|kafka|keepalived|mimir|loki|promeetheus|exporter|mongo|nginx|grafana|docker|hdfs|hive|hbase|yarn"
+
+node_facts_steps:
