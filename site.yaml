@@ -7,7 +7,7 @@
   tags:
     - with_local_repo
 
-- name: Add local repository on sp_nodes
+- name: Add local repository on nodes
   hosts: nodes
   become: true
   roles:
@@ -73,3 +73,29 @@
     - containerd_mirrors
   tags:
     - with_containerd_mirrors
+
+- name: Install k3s
+  hosts: k3s
+  become: true
+  roles:
+    - k3s
+  tags:
+    - with_k3s
+
+- name: Install pulsar
+  hosts: pulsar_nodes
+  become: true
+  roles:
+    - pulsar
+  tags:
+    - with_pulsar
+
+# -----------SAMPLE-----------
+#
+# - name: Install {{service}}
+#   hosts: {{service}}_nodes
+#   become: true
+#   roles:
+#     - {{role_name}}
+#   tags:
+#     - with_{{role_name}}
