@@ -1,0 +1,10 @@
+---
+redis_stack_install_type: cluster
+redis_stack_port: 6379
+redis_stack_version: 7.2.0_v9
+redis_stack_password:
+redis_stack_cluster_nodes: "IP:7000 IP:7000 IP:7000 IP:7001 IP:7001 IP:7001"
+redis_stack_steps:
+  - install
+  - configure
+  - post_check

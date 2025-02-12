@@ -1,0 +1,10 @@
+---
+- name: Ensure redis cluster systemd units enabled
+  ansible.builtin.systemd_service:
+    name: "{{item}}"
+    enabled: true
+    state: started
+    daemon-reload: true
+  loop:
+    - redis_7000
+    - redis_7001

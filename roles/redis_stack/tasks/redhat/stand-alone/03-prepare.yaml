@@ -1,0 +1,12 @@
+---
+- name: Set overcommit memory to 0
+  ansible.posix.sysctl:
+    name: vm.overcommit_memory
+    value: "1"
+    state: present
+
+- name: Set net.core.maxconn to 65535
+  ansible.posix.sysctl:
+    name: net.core.maxconn
+    value: "65535"
+    state: present

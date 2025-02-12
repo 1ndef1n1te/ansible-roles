@@ -1,0 +1,67 @@
+---
+- name: Create redis user
+  ansible.builtin.user:
+    name: redis
+
+- name: Create redis-stack-server directories
+  ansible.builtin.file:
+    state: directory
+    path: "{{item}}"
+    owner: redis
+    group: redis
+  loop:
+    - /etc/redis/cluster
+    - /etc/redis/cluster/7000
+    - /var/lib/redis/7000
+    - /etc/redis/cluster/7001
+    - /var/lib/redis/7001
+    - /var/log/redis
+
+- name: Template redis_7000 (master) config file
+  ansible.builtin.template:
+    src: "{{ ansible_distribution_file_variety | lower }}/{{ redis_stack_install_type
+      }}/redis_7000.conf.j2"
+    dest: /etc/redis/cluster/7000/redis_7000.conf
+    mode: "0644"
+    owner: redis
+    group: redis
+
+- name: Template redis_7001 (slave) config file
+  ansible.builtin.template:
+    src: "{{ ansible_distribution_file_variety | lower }}/{{ redis_stack_install_type
+      }}/redis_7001.conf.j2"
+    dest: /etc/redis/cluster/7001/redis_7001.conf
+    mode: "0644"
+    owner: redis
+    group: redis
+
+- name: Template master service file
+  ansible.builtin.template:
+    src: "{{ ansible_distribution_file_variety | lower }}/{{ redis_stack_install_type
+      }}/redis_7000.service.j2"
+    dest: /etc/systemd/system/redis_7000.service
+    mode: "0644"
+
+- name: Template slave service file
+  ansible.builtin.template:
+    src: "{{ ansible_distribution_file_variety | lower }}/{{ redis_stack_install_type
+      }}/redis_7001.service.j2"
+    dest: /etc/systemd/system/redis_7001.service
+    mode: "0644"
+
+- name: Enable now redis cluster systemd units
+  ansible.builtin.systemd_service:
+    name: "{{item}}"
+    enabled: true
+    state: restarted
+    daemon-reload: true
+  loop:
+    - redis_7000
+    - redis_7001
+
+- name: Init redis cluster
+  ansible.builtin.shell: >
+    redis-cli --cluster create  {{redis_stack_cluster_nodes}}
+    --cluster-replicas 1 --cluster-yes
+    -a {{redis_stack_password}}
+  run_once: true

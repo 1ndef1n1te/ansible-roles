@@ -1,0 +1,9 @@
+---
+- name: Copy Redis Stack config file
+  ansible.builtin.template:
+    src: "{{ ansible_distribution_file_variety | lower }}/{{ redis_stack_install_type
+      }}/redis-stack.conf.j2"
+    dest: /etc/redis-stack.conf
+    mode: "0644"
+  notify:
+    - Restart redis systemd unit

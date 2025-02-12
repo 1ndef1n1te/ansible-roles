@@ -1,0 +1,35 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that installs stand-alone Minio S3 storage
+    options:
+      redis_stack_install_type:
+        type: str
+        description: Redis Stack installation type
+        choices:
+          - stand-alone
+          - cluster
+      redis_stack_port:
+        type: str
+        description: Redis port
+        default: "6379"
+      redis_stack_packages:
+        type: str
+        description: Packages required for Redis Stack to install
+        default:
+          redhat:
+            - epel-release
+            - openssl-devel
+            - compat-openssl10
+            - redis-stack-server
+      redis_stack_cluster_nodes:
+        type: str
+        description: String of redis host:port cluster nodes
+      redis_stack_password:
+        type: str
+        description: Redis password
+      redis_stack_steps:
+        type: list
+        elements: str
+        description: Task steps that will be run in redis_stack role

@@ -1,0 +1,7 @@
+---
+redis_stack_packages:
+  redhat:
+    - epel-release
+    - openssl-devel
+    - compat-openssl10
+    - redis-stack-server-{{ redis_stack_version }}
