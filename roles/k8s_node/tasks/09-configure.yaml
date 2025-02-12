@@ -1,0 +1,17 @@
+---
+- name: Copy config.toml for containerd
+  ansible.builtin.copy:
+    src: ../files/config.toml
+    dest: /etc/containerd/config.toml
+
+- name: Enable and start containerd
+  ansible.builtin.systemd_service:
+    name: containerd
+    enabled: true
+    state: started
+
+- name: Enable and start Kubelet
+  ansible.builtin.systemd_service:
+    name: kubelet
+    enabled: true
+    state: started

@@ -1,0 +1,5 @@
+---
+k8s_node_k8s_packages:
+  - kubelet
+  - kubeadm
+  - kubectl

@@ -1,0 +1,28 @@
+---
+dependencies:
+  - role: nofirewall
+    vars: {}
+argument_specs:
+  main:
+    description: >
+      Role that prepare node to join kubernetes cluster
+    options:
+      k8s_node_install_type:
+        type: str
+        description: Installation type of k8s_node role
+        choices:
+          - online
+          - offline
+      k8s_node_containerd_version:
+        type: str
+        description: Package version of containerd
+      k8s_node_k8s_version:
+        type: str
+        description: Version of k8s, for kubelet, kubeadm and kubectl packages
+      k8s_node_crictl_version:
+        type: str
+        description: Version of crictl binary
+      k8s_node_steps:
+        type: list
+        elements: str
+        description: Task steps that will be run in k8s_node role

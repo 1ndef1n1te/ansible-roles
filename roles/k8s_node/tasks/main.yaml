@@ -1,0 +1,9 @@
+---
+- name: Include prepare tasks
+  ansible.builtin.include_tasks: "03-prepare.yaml"
+  when: '"prepare" in k8s_node_steps'
+- name: Include install tasks
+  ansible.builtin.include_tasks: "06-install-{{k8s_node_install_type}}.yaml"
+- name: Include configure tasks
+  ansible.builtin.include_tasks: "09-configure.yaml"
+  when: '"configure" in k8s_node_steps'

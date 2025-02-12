@@ -1,0 +1,27 @@
+---
+- name: Configure kubernetes repo
+  ansible.builtin.yum_repository:
+    name: kubernetes
+    description: Kubernetes repo
+    baseurl: "https://pkgs.k8s.io/core:/stable:/{{k8s_node_k8s_minor_version}}/rpm/"
+    gpgcheck: true
+    gpgkey: https://pkgs.k8s.io/core:/stable:/{{k8s_node_k8s_minor_version}}/rpm/repodata/repomd.xml.key
+
+- name: Install containerd packages
+  ansible.builtin.yum:
+    name: containerd-{{k8s_node_containerd_version}}
+    state: present
+    update_cache: true
+
+- name: Install packages for Kubernetes
+  ansible.builtin.yum:
+    name: "{{item}}-{{k8s_node_k8s_version}}"
+    state: present
+    update_cache: true
+  loop: "{{k8s_node_k8s_packages}}"
+
+- name: Install cri-tools
+  ansible.builtin.yum:
+    name: "cri-tools-{{k8s_node_crictl_version}}"
+    state: present
+    update_cache: true

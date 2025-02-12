@@ -1,0 +1,40 @@
+---
+- name: Disable swap on current instance
+  ansible.builtin.shell: |
+    swapoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: Disable swap in fstab
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: "^(.*swap.*)$"
+    replace: '# \1'
+  when: ansible_swaptotal_mb > 0
+
+- name: Add br_netfilter module
+  community.general.modprobe:
+    name: br_netfilter
+    state: present
+
+- name: Add overlay module
+  community.general.modprobe:
+    name: overlay
+    state: present
+
+- name: Set net.bridge.bridge-nf-call-ip6tables to 1
+  ansible.posix.sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: "1"
+    state: present
+
+- name: Set net.bridge.bridge-nf-call-iptables to 1
+  ansible.posix.sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: "1"
+    state: present
+
+- name: Set net.ipv4.ip_forward to 1
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    state: present

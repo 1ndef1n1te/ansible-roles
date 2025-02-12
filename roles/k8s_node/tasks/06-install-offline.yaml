@@ -1,0 +1,26 @@
+---
+- name: Install containerd packages
+  ansible.builtin.yum:
+    name: containerd.io-{{k8s_node_containerd_version}}
+    state: present
+    disablerepo: "*"
+    enablerepo:
+      sp-local-{{ ansible_distribution | lower + ansible_distribution_major_version
+      }}
+    update_cache: true
+
+- name: Install packages for Kubernetes
+  ansible.builtin.yum:
+    name: "{{item}}-{{k8s_node_k8s_version}}"
+    state: present
+    disablerepo: "*"
+    enablerepo:
+      sp-local-{{ ansible_distribution | lower + ansible_distribution_major_version
+      }}
+    update_cache: true
+  loop: "{{k8s_node_k8s_packages}}"
+
+- name: Copy crictl binary
+  ansible.builtin.unarchive:
+    src: ../files/crictl/crictl-{{k8s_node_crictl_version}}-linux-amd64.tar.gz
+    dest: /usr/bin
