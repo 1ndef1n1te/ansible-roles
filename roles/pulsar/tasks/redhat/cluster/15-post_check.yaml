@@ -1,0 +1,11 @@
+---
+- name: Ensure pulsar services is running
+  ansible.builtin.systemd_service:
+    name: "{{item}}"
+    enabled: true
+    daemon_reload: true
+    state: started
+  loop:
+    - pulsar-zookeeper
+    - pulsar-bookkeeper
+    - pulsar-broker

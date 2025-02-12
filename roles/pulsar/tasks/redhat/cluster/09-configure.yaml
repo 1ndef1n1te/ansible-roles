@@ -1,0 +1,104 @@
+---
+- name: Zookeeper config block
+  block:
+    - name: Template zookeeper config file
+      ansible.builtin.template:
+        src: "{{ pulsar_install_type }}/zookeeper.conf.j2"
+        dest: "/opt/apache-pulsar-{{ pulsar_version }}/conf/zookeeper.conf"
+        owner: "{{ pulsar_user }}"
+        group: "{{ pulsar_user }}"
+        mode: "0644"
+
+    - name: Create zookeeper dataDir
+      ansible.builtin.file:
+        path: "{{pulsar_zookeeper_dataDir}}"
+        state: directory
+
+    - name: Enter ID of zookeeper machine
+      ansible.builtin.lineinfile:
+        path: "{{pulsar_zookeeper_dataDir}}/myid"
+        line: "{{zookeeper_id}}"
+        create: yes
+
+    - name: Template zookeeper systemd service file
+      ansible.builtin.template:
+        src: "{{ pulsar_install_type }}/pulsar-zookeeper.service.j2"
+        dest: /etc/systemd/system/pulsar-zookeeper.service
+        owner: "{{ pulsar_user }}"
+        group: "{{ pulsar_user }}"
+        mode: '0644'
+
+    - name: Start zookeeper service
+      ansible.builtin.systemd_service:
+        name: pulsar-zookeeper
+        enabled: true
+        daemon_reload: true
+        state: started
+
+- name: Start intit metadata cluster block
+  block:
+    - name: Pause for 15 seconds for ZK start
+      ansible.builtin.pause:
+        seconds: 15
+    - name: Init cluster metadata
+      ansible.builtin.shell: |
+        ./pulsar initialize-cluster-metadata \
+          --cluster {{pulsar_cluster_name}} \
+          --metadata-store {{pulsar_metadata_store_url}} \
+          --configuration-metadata-store {{pulsar_configuration_metadata_store}} \
+          --web-service-url {{pulsar_web_service_url}} \
+          --broker-service-url {{pulsar_broker_service_url}} \
+      args:
+        chdir:
+          "/opt/apache-pulsar-{{ pulsar_version }}/bin"
+      run_once: true
+
+- name: Start configure bookkeeper block
+  block:
+    - name: Template bookkeeper config file
+      ansible.builtin.template:
+        src: "{{ pulsar_install_type }}/bookkeeper.conf.j2"
+        dest: "/opt/apache-pulsar-{{ pulsar_version }}/conf/bookkeeper.conf"
+        owner: "{{ pulsar_user }}"
+        group: "{{ pulsar_user }}"
+        mode: "0644"
+
+    - name: Template bookkeeper systemd service file
+      ansible.builtin.template:
+        src: "{{ pulsar_install_type }}/pulsar-bookkeeper.service.j2"
+        dest: /etc/systemd/system/pulsar-bookkeeper.service
+        owner: "{{ pulsar_user }}"
+        group: "{{ pulsar_user }}"
+        mode: '0644'
+
+    - name: Start bookkeeper service
+      ansible.builtin.systemd_service:
+        name: pulsar-bookkeeper
+        enabled: true
+        daemon_reload: true
+        state: started
+
+- name: Start configure broker block
+  block:
+    - name: Tempate broker config
+      ansible.builtin.template:
+        src: "{{ pulsar_install_type }}/broker.conf.j2"
+        dest: "/opt/apache-pulsar-{{ pulsar_version }}/conf/broker.conf"
+        owner: "{{ pulsar_user }}"
+        group: "{{ pulsar_user }}"
+        mode: "0644"
+
+    - name: Template broker systemd service file
+      ansible.builtin.template:
+        src: "{{ pulsar_install_type }}/pulsar-broker.service.j2"
+        dest: /etc/systemd/system/pulsar-broker.service
+        owner: "{{ pulsar_user }}"
+        group: "{{ pulsar_user }}"
+        mode: '0644'
+
+    - name: Start broker service
+      ansible.builtin.systemd_service:
+        name: pulsar-broker
+        enabled: true
+        daemon_reload: true
+        state: started

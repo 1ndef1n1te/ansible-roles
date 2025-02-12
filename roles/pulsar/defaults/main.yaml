@@ -1,0 +1,22 @@
+---
+pulsar_install_type: cluster
+pulsar_zookeeper_dataDir: /opt/apache-pulsar-{{ pulsar_version }}/data/zookeeper
+pulsar_zookeeper_http_metric_port: 8088
+pulsar_cluster_name: cluster-name
+pulsar_metadata_store_url: zk:IP:2181
+pulsar_configuration_metadata_store: zk:IP:2181
+pulsar_web_service_url: http://IP:8080,IP:8080,IP:8080
+pulsar_broker_service_url: pulsar://IP:6650,IP:6650,IP:6650
+pulsar_metadata_service_uri: zk://IP:2181;IP:2181;IP:2181/ledgers
+pulsar_metadata_store_url: zk:IP:2181,IP:2181,IP:2181
+pulsar_version: 4.0.0
+pulsar_broker_service_port: 6650
+pulsar_web_service_port: 8080
+pulsar_user: root
+pulsar_java_version: 17-openjdk
+
+pulsar_steps:
+  - prepare
+  - install
+  - configure
+  - post_check

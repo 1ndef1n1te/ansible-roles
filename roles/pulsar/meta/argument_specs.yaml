@@ -1,0 +1,38 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that installs stand-alone Apache Pulsar message platform
+    options:
+      pulsar_install_type:
+        type: str
+        description: Pulsar installation type
+        choices:
+          # - stand-alone TODO
+          - cluster
+      pulsar_version:
+        type: str
+        description: Apache Pulsar version number in format \ "[0-9]+\.[0-9]+\.[0-9]+"
+          (e.g. "3.2.1")
+        default: 3.2.1
+      pulsar_broker_service_port:
+        type: str
+        description: Pulsar broker port
+        default: "6650"
+      pulsar_web_service_port:
+        type: str
+        description: Pulsar HTTP port
+        default: "8080"
+      pulsar_user:
+        type: str
+        description: Linux user to run Pulsar
+        default: root
+      pulsar_java_version:
+        type: str
+        description: Java version installed and used by Pulsar
+        default: 1.8.0-openjdk
+
+      pulsar_steps:
+        type: list
+        elements: str
+        description: Task steps that will be run in pulsar role

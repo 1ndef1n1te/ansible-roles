@@ -1,0 +1,13 @@
+[Unit]
+Description= Pulsar BookKeeper
+After=network.target
+
+[Service]
+ExecStart=/opt/apache-pulsar-{{ pulsar_version }}/bin/pulsar bookie
+WorkingDirectory=/opt/apache-pulsar-{{ pulsar_version }}
+RestartSec=1s
+Restart=on-failure
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
