@@ -1,0 +1,4 @@
+containerd_mirrors_registries:
+  - registry.k8s.io
+
+containerd_mirrors_steps:

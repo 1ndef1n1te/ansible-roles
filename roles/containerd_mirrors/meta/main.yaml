@@ -1,0 +1,9 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that configure mirrors for containerd
+    options:
+      containerd_mirrors_registries:
+        type: list
+        description: List of registries that should be mirrored

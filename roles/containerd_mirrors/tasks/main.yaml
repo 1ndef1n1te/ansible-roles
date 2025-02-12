@@ -1,0 +1,21 @@
+- name: Create certs.d directory
+  ansible.builtin.file:
+    state: directory
+    path: /etc/containerd/certs.d
+
+- name: Create directories for each registry
+  ansible.builtin.file:
+    path: "/etc/containerd/certs.d/{{item}}"
+    state: directory
+  loop: "{{containerd_mirrors_registries}}"
+
+- name: Copy config files for each registry
+  ansible.builtin.copy:
+    src: "../files/{{item}}"
+    dest: "/etc/containerd/certs.d/{{item}}/hosts.toml"
+  loop: "{{containerd_mirrors_registries}}"
+
+- name: Restart containerd daemon
+  ansible.builtin.service:
+    name: containerd
+    state: restarted
