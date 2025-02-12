@@ -1,0 +1,7 @@
+---
+- name: Include configure tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/03-configure.yaml"
+  when: '"configure" in local_repo_on_nodes_steps'
+- name: Include check tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/06-post_configure_check.yaml"
+  when: '"post_configure_check" in local_repo_on_nodes_steps'

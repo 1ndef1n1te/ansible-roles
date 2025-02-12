@@ -1,0 +1,19 @@
+---
+- name: Start installation block
+  when: "'nginx' not in ansible_facts.packages"
+  block:
+    - name: Copy rpm files
+      ansible.builtin.copy:
+        src: "{{ ansible_distribution | lower + ansible_distribution_major_version
+          }}/ilr-rpms"
+        dest: /tmp/
+    - name: Installing local repo
+      ansible.builtin.shell: |
+        yum localinstall *.rpm -y --disablerepo=* --allowerasing
+      args:
+        chdir: /tmp/ilr-rpms
+  always:
+    - name: Delete rpm files from fs
+      ansible.builtin.file:
+        state: absent
+        path: /tmp/ilr-rpms

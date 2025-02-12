@@ -1,0 +1,9 @@
+---
+# Default vars for local_repo_on_nodes role
+
+local_repo_on_nodes_repo_url: http://IP:PORT/repo-content
+local_repo_on_nodes_repo_name: sp-local
+
+local_repo_on_nodes_steps:
+  - configure
+  - post_configure_check

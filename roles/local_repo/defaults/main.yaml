@@ -1,0 +1,13 @@
+---
+# Default vars for install_local_repo role
+
+local_repo_repo_directory: /repodir
+local_repo_nginx_user: nginx
+local_repo_nginx_port: 80
+local_repo_repo_name: sp-local
+
+local_repo_steps:
+  - prepare
+  - install
+  - configure
+  - post_installation_check

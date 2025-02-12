@@ -1,0 +1,18 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that configure local repo for CentOS7 and Rcoky9
+    options:
+      local_repo_on_nodes_repo_url:
+        type: str
+        description: Local repo url like http://x.x.x.x:y/repo-content
+      local_repo_on_nodes_repo_name:
+        type: str
+        description: Local repo name
+        default: sp-local
+
+      local_repo_on_nodes_steps:
+        type: list
+        elements: str
+        description: Task steps that will be run in local_repo_on_nodes role

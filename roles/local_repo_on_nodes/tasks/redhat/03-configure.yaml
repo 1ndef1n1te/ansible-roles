@@ -1,0 +1,12 @@
+---
+- name: Setup new local repo
+  ansible.builtin.yum_repository:
+    name:
+      "{{local_repo_on_nodes_repo_name}}-{{ ansible_distribution | lower + ansible_distribution_major_version
+      }}"
+    description: Local repo for installing streaming-platform
+    baseurl:
+      "{{local_repo_on_nodes_repo_url}}/{{ ansible_distribution | lower}}/{{ansible_distribution_major_version
+      }}"
+    gpgcheck: false
+    enabled: true

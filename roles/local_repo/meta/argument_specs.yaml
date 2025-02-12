@@ -1,0 +1,27 @@
+---
+argument_specs:
+  main:
+    description: >
+      Role that install nginx local repo on node.
+    options:
+      local_repo_repo_directory:
+        type: str
+        description: Local repo content directory
+        default: /localrepo
+      local_repo_nginx_user:
+        type: str
+        description: User that runs nginx process
+        default: nginx
+      local_repo_nginx_port:
+        type: str
+        description: Local repo port
+        default: "80"
+      local_repo_repo_name:
+        type: str
+        description: Local repo name
+        default: sp-repo
+
+      local_repo_steps:
+        type: list
+        elements: str
+        description: Task steps that will be run in local_repo role

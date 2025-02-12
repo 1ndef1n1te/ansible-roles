@@ -1,0 +1,35 @@
+---
+- name: Start check block
+  block:
+    - name: Setup new local repo
+      ansible.builtin.yum_repository:
+        name: "{{local_repo_repo_name}}-{{item | replace('/', '')}}"
+        description: Local repo for installing streaming-platform
+        baseurl: http://{{ansible_host}}/repo-content/{{item}}
+        gpgcheck: false
+        enabled: true
+      changed_when: false
+      loop:
+        - centos/7
+        - rocky/9
+    - name: Check if repo works
+      ansible.builtin.yum:
+        disablerepo: "*"
+        enablerepo: "{{local_repo_repo_name}}-{{item | replace('/', '')}}"
+        update_cache: true
+      loop:
+        - centos/7
+        - rocky/9
+    - name: Notify about successful installation local repo
+      ansible.builtin.debug:
+        msg: Local repo successfully installed
+  always:
+    - name: Removing repositories...
+      ansible.builtin.yum_repository:
+        name: "{{local_repo_repo_name}}-{{item | replace('/', '')}}"
+        state: absent
+      changed_when: false
+      notify: yum-clean-metadata
+      loop:
+        - centos/7
+        - rocky/9

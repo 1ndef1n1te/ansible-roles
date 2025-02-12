@@ -1,0 +1,13 @@
+---
+- name: Include prepare tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/03-prepare.yaml"
+  when: '"prepare" in local_repo_steps'
+- name: Include installation tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/06-install.yaml"
+  when: '"install" in local_repo_steps'
+- name: Include configure tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/09-configure.yaml"
+  when: '"configure" in local_repo_steps'
+- name: Include check tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution_file_variety | lower }}/12-post_installation_check.yaml"
+  when: '"post_installation_check" in local_repo_steps'

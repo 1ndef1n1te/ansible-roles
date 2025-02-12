@@ -1,0 +1,27 @@
+---
+- name: Start check block
+  block:
+    - name: Check new repo avalability
+      ansible.builtin.yum:
+        disablerepo: "*"
+        enablerepo:
+          "{{local_repo_on_nodes_repo_name}}-{{ ansible_distribution | lower + ansible_distribution_major_version
+          }}"
+        update_cache: true
+
+    - name: Notify about successful installation local repo
+      ansible.builtin.debug:
+        msg: Local repo successfully installed on node {{ansible_host}}
+  rescue:
+    - name: Removing repositories...
+      ansible.builtin.yum_repository:
+        name:
+          "{{local_repo_on_nodes_repo_name}}-{{ ansible_distribution | lower + ansible_distribution_major_version
+          }}"
+        state: absent
+
+    - name: Fail if check is not performed
+      ansible.builtin.fail:
+        msg:
+          Something went wrong while checking new local repo installation, play
+          aborted...

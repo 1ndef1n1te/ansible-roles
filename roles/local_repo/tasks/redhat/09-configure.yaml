@@ -1,0 +1,39 @@
+---
+- name: Create repo directory
+  ansible.builtin.file:
+    path: "{{local_repo_repo_directory}}"
+    state: directory
+    mode: "0755"
+    owner: nginx
+    group: nginx
+
+- name: Copy repo files
+  ansible.builtin.copy:
+    src: repo-content
+    dest: "{{local_repo_repo_directory}}"
+    owner: nginx
+    group: nginx
+  register: __local_repo_copy_status
+
+- name: Create local repo
+  ansible.builtin.shell: |
+    createrepo --update repo-content/{{item}} && chown -R nginx:nginx {{local_repo_repo_directory}}
+  args:
+    chdir: "{{local_repo_repo_directory}}"
+  loop:
+    - centos/7
+    - rocky/9
+  when: __local_repo_copy_status.changed
+
+- name: Copy nginx files
+  ansible.builtin.template:
+    src: "{{ ansible_distribution_file_variety | lower }}/nginx.conf.j2"
+    dest: /etc/nginx/nginx.conf
+    owner: nginx
+    group: nginx
+
+- name: Start nginx
+  ansible.builtin.service:
+    name: nginx
+    enabled: true
+    state: started
